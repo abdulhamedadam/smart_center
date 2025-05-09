@@ -13,7 +13,9 @@ return [
     | This will allow your users to receive real-time notifications.
     |
     */
-
+    'default' => [
+        'dashboard' => \App\Filament\Pages\Dashboard::class,
+    ],
     'broadcasting' => [
 
         // 'echo' => [

@@ -28,6 +28,8 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->globalSearchKeyBindings(['command+k', 'ctrl+k'])
+            ->globalSearch(true)
             ->colors([
                 'primary' => Color::Blue,
             ])
@@ -64,4 +66,24 @@ class AdminPanelProvider extends PanelProvider
             Settings::class,
         ];
     }
+
+    protected function getNavigationItems(): array
+    {
+
+
+
+        return [
+            // ... other items
+            \Filament\Navigation\NavigationItem::make('CRM')
+                ->icon('heroicon-o-user-group')
+                ->group('CRM')
+                ->items([
+                    \Filament\Navigation\NavigationItem::make('Dashboard')
+                        ->icon('heroicon-o-chart-bar')
+                        ->url(route('filament.pages.crm-dashboard')),
+                    // Add other CRM items here
+                ]),
+        ];
+    }
+
 }

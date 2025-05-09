@@ -29,7 +29,11 @@ class LevelsResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Forms\Components\Section::make()->schema([
+                    Forms\Components\TextInput::make('name')
+                        ->label(__('common.Name'))
+                        ->required()
+                ]),
             ]);
     }
 
@@ -37,7 +41,17 @@ class LevelsResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('name')->label(__('common.Name'))
+                    ->sortable()
+                    ->searchable(),
+
+                Tables\Columns\TextColumn::make('name')
+                    ->label('المستوى')
+                    ->color(fn (Levels $record) => match($record->name) {
+                        'المبتدئ' => 'primary',
+                        'الاحترافي' => 'success',
+                        default => 'gray'
+                    })
             ])
             ->filters([
                 //

@@ -2,6 +2,13 @@
 
 namespace App\Providers;
 
+use App\Interfaces\CourseInterface;
+use App\Interfaces\StudentInterface;
+use App\Repository\CourseRepository;
+use App\Repository\StudentRepository;
+use App\Services\CourseService;
+use App\Services\StudentService;
+
 use BezhanSalleh\FilamentLanguageSwitch\LanguageSwitch;
 use Illuminate\Support\ServiceProvider;
 
@@ -12,7 +19,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(
+            CourseInterface::class,
+            CourseRepository::class,
+            CourseService::class
+        );
+        $this->app->bind(
+            StudentInterface::class,
+            StudentRepository::class,
+            StudentService::class
+        );
     }
 
     /**

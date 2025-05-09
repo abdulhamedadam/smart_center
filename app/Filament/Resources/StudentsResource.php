@@ -151,14 +151,48 @@ class StudentsResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-                Tables\Actions\Action::make('details')
-                    ->button()
-                    ->label(__('committee.Details'))
-                    ->icon('heroicon-o-eye')
-                    ->url(fn($record) => static::getUrl('details', ['record' => $record])),
+                \Filament\Tables\Actions\ActionGroup::make([
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\DeleteAction::make(),
+                    Tables\Actions\Action::make('details')
+                        ->label(__('common.Details'))
+                        ->icon('heroicon-o-document-text')
+                        ->url(fn($record) => static::getUrl('details', ['record' => $record])),
 
+                    Tables\Actions\Action::make('courses')
+                        ->label(__('common.courses'))
+                        ->icon('heroicon-o-book-open')
+                        ->url(fn($record) => static::getUrl('courses', ['record' => $record])),
+
+                    Tables\Actions\Action::make('schedules')
+                        ->label(__('common.schedules'))
+                        ->icon('heroicon-o-calendar')
+                        ->url(fn($record) => static::getUrl('schedules', ['record' => $record])),
+
+                    Tables\Actions\Action::make('attendance')
+                        ->label(__('common.attendance'))
+                        ->icon('heroicon-o-user-group')
+                        ->url(fn($record) => static::getUrl('attendance', ['record' => $record])),
+
+                    Tables\Actions\Action::make('payments')
+                        ->label(__('common.payments'))
+                        ->icon('heroicon-o-currency-dollar')
+                        ->url(fn($record) => static::getUrl('payments', ['record' => $record])),
+
+                    Tables\Actions\Action::make('tests')
+                        ->label(__('common.tests'))
+                        ->icon('heroicon-o-clipboard-document-check') // Fixed icon name
+                        ->url(fn($record) => static::getUrl('tests', ['record' => $record])),
+
+                    Tables\Actions\Action::make('assignments')
+                        ->label(__('common.assignments'))
+                        ->icon('heroicon-o-document')
+                        ->url(fn($record) => static::getUrl('assignments', ['record' => $record])),
+                ])
+                    ->icon('heroicon-m-ellipsis-vertical')
+                    ->tooltip(__('Actions'))
+                    ->color('primary')
+                    ->button()
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -181,6 +215,12 @@ class StudentsResource extends Resource
             'create' => Pages\CreateStudents::route('/create'),
             'edit' => Pages\EditStudents::route('/{record}/edit'),
             'details' => Pages\StudentDetails::route('/{record}/details'),
+            'courses' => Pages\Courses::route('/{record}/courses'),
+            'schedules' => Pages\Schedules::route('/{record}/schedules'),
+            'attendance' => Pages\Attendance::route('/{record}/attendance'),
+            'payments' => Pages\Payments::route('/{record}/payments'),
+            'tests' => Pages\Tests::route('/{record}/tests'),
+            'assignments' => Pages\Assigments::route('/{record}/assignments'),
         ];
     }
 

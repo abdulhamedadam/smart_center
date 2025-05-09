@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->string('name');
             $table->text('description');
             $table->integer('created_by');
-            $table->integer('updated_by');
+
             $table->softDeletes();
             $table->timestamps();
         });

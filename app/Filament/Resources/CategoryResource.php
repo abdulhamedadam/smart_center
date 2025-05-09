@@ -6,9 +6,13 @@ use App\Filament\Resources\CategoryResource\Pages;
 use App\Filament\Resources\CategoryResource\RelationManagers;
 use App\Models\Category;
 use Filament\Forms;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -19,11 +23,37 @@ class CategoryResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                //
+
+                Forms\Components\Grid::make()
+                    ->schema([
+                        TextInput::make('name')
+                            ->label(__('common.name'))
+                            ->required()
+                            ->maxLength(255)
+                            ->columnSpan(1),
+
+                        SpatieMediaLibraryFileUpload::make('category')
+                            ->collection('category')
+                            ->label(__('common.Image'))
+
+                            ->image()
+                            ->responsiveImages()
+                            ->disk('public')
+                            ->rules(['image', 'max:2048']),
+                    ])
+                    ->columns(2),
+
+                Textarea::make('description')
+                    ->label(__('common.Description'))
+                    ->required()
+                    ->maxLength(65535)
+                    ->columnSpanFull()
+                    ->rows(5),
             ]);
     }
 
@@ -31,10 +61,31 @@ class CategoryResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('name')
+                    ->label(__('common.name'))
+                    ->searchable()
+                    ->sortable(),
+
+                Tables\Columns\TextColumn::make('description')
+                    ->label(__('common.Description'))
+                    ->limit(50)
+                    ->tooltip(function (Tables\Columns\TextColumn $column): ?string {
+                        $state = $column->getState();
+                        if (strlen($state) <= 50) {
+                            return null;
+                        }
+                        return $state;
+                    })
+                    ->searchable(),
+                SpatieMediaLibraryImageColumn::make('image')
+                    ->label(__('common.Image'))
+                    ->collection('category')
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->disk('')
+                    ->circular(),
             ])
             ->filters([
-                //
+
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
