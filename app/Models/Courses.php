@@ -83,6 +83,10 @@ class Courses extends Model
         return $this->hasMany(CourseSchedule::class, 'course_id');
     }
     /***************************************************/
+    public function payments()
+    {
+        return $this->hasMany(CoursePayments::class, 'course_id');
+    }
 
 
 

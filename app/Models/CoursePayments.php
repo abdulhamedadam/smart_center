@@ -27,6 +27,10 @@ class CoursePayments extends Model
     {
         return $this->hasMany(PaymentTransactions::class,'course_payment_id','id');
     }
+    public function installments()
+    {
+        return $this->hasMany(CourseInstallments::class, 'course_payment_id');
+    }
 
 
 }

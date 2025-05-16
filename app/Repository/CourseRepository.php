@@ -111,6 +111,8 @@ class CourseRepository implements CourseInterface
                 'course_payment_id' => $payment->id,
                 'amount' => round($currentAmount, 2),
                 'due_date' => $dueDate,
+                'course_id' => $payment->course_id,
+                'student_id' => $payment->student_id,
                 'status' => 'remaining',
             ]);
 

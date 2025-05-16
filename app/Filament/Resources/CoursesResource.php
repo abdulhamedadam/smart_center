@@ -30,6 +30,12 @@ class CoursesResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    protected static ?int $sort = 2;
+    public static function getNavigationGroup(): string
+    {
+        return __('common.courses_management');
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -39,17 +45,22 @@ class CoursesResource extends Resource
                         ->label(__('common.category'))
                         ->relationship('Category', 'name')
                         ->required()
+                        ->preload()
+                        ->searchable()
                         ->columnSpan(1),
 
                     Select::make('level_id')
                         ->label(__('common.level'))
                         ->relationship(name: 'Level', titleAttribute: 'name')
                         ->required()
+                        ->preload()
+                        ->searchable()
                         ->columnSpan(1),
 
                     TextInput::make('name')
                         ->label(__('common.course_name'))
                         ->required()
+
                         ->maxLength(255)
                         ->columnSpan(1),
 
@@ -64,6 +75,8 @@ class CoursesResource extends Resource
                         ->label(__('common.instructor'))
                         ->relationship(name: 'Instructor', titleAttribute: 'name')
                         ->required()
+                        ->preload()
+                        ->searchable()
                         ->columnSpan(1),
 
                     TextInput::make('price')
@@ -71,7 +84,7 @@ class CoursesResource extends Resource
                         ->numeric()
                         ->required()
                         ->prefix(config('app.currency_symbol', '$'))
-                        ->live() // Enable live updates
+                        ->live(onBlur: false, debounce: 500) // Update after 500ms of no typing
                         ->afterStateUpdated(function (Get $get, Set $set) {
                             self::calculateTotalPrice($get, $set);
                         })
@@ -92,7 +105,7 @@ class CoursesResource extends Resource
                     TextInput::make('discount')
                         ->label(__('common.discount'))
                         ->numeric()
-                        ->live() // Enable live updates
+                        ->live()
                         ->afterStateUpdated(function (Get $get, Set $set) {
                             self::calculateTotalPrice($get, $set);
                         })
@@ -109,6 +122,7 @@ class CoursesResource extends Resource
                         ->onColor('success')
                         ->offColor('danger')
                         ->default(true)
+                        ->inline(false)
                         ->inlineLabel(false)
                         ->columnSpan(1),
                     TextInput::make('duration')
@@ -162,8 +176,6 @@ class CoursesResource extends Resource
                         })
                         ->columnSpan(1),
 
-
-                    // Sixth Row
                     TextInput::make('max_students')
                         ->label(__('common.max_students'))
                         ->numeric()
@@ -350,10 +362,7 @@ class CoursesResource extends Resource
                        ->icon('heroicon-o-currency-dollar')
                        ->url(fn($record) => static::getUrl('complaints', ['record' => $record])),
                 ])
-                    ->icon('heroicon-m-ellipsis-vertical')
-                    ->tooltip(__('Actions'))
-                    ->color('primary')
-                    ->button()
+                   ->icon('heroicon-m-ellipsis-vertical'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -400,22 +409,17 @@ class CoursesResource extends Resource
     /********************************************************/
     protected static function calculateTotalPrice(Get $get, Set $set): void
     {
-        $price = (float)$get('price');
-        $discount = (float)$get('discount');
-        $type = $get('discount_type');
+        $price = (float) ($get('price') ?? 0);
+        $discountType = $get('discount_type');
+        $discount = (float) ($get('discount') ?? 0);
 
-        if (!is_numeric($price)) {
-            $set('total_price', 0);
-            return;
-        }
-
-        $total = match ($type) {
-            'p' => $price - ($price * $discount / 100),
-            'v' => max($price - $discount, 0),
-            default => $price,
+        $total = match ($discountType) {
+            'p' => $price - ($price * ($discount / 100)), // Percentage discount
+            'v' => $price - $discount, // Fixed discount
+            default => $price, // No discount
         };
 
-        $set('total_price', number_format($total, 2));
+        $set('total_price', max($total, 0)); // Ensure total is never negative
     }
 
     // LOCALIZATION =====================================================================

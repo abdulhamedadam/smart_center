@@ -20,7 +20,11 @@ class StudentsResource extends Resource
     protected static ?string $model = Students::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-academic-cap';
-
+    protected static ?int $sort = 1;
+    public static function getNavigationGroup(): string
+    {
+        return __('common.users_management');
+    }
 
     public static function form(Form $form): Form
     {
@@ -73,6 +77,7 @@ class StudentsResource extends Resource
                     ->schema([
                         Forms\Components\DatePicker::make('registration_date')
                             ->label(__('common.RegistrationDate'))
+                            ->default(\Carbon\Carbon::now())
                             ->required(),
                         Forms\Components\Select::make('status')
                             ->label(__('common.Status'))
@@ -181,7 +186,7 @@ class StudentsResource extends Resource
 
                     Tables\Actions\Action::make('tests')
                         ->label(__('common.tests'))
-                        ->icon('heroicon-o-clipboard-document-check') // Fixed icon name
+                        ->icon('heroicon-o-clipboard-document-check')
                         ->url(fn($record) => static::getUrl('tests', ['record' => $record])),
 
                     Tables\Actions\Action::make('assignments')
@@ -189,10 +194,7 @@ class StudentsResource extends Resource
                         ->icon('heroicon-o-document')
                         ->url(fn($record) => static::getUrl('assignments', ['record' => $record])),
                 ])
-                    ->icon('heroicon-m-ellipsis-vertical')
-                    ->tooltip(__('Actions'))
-                    ->color('primary')
-                    ->button()
+                    ->icon('heroicon-m-ellipsis-vertical'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -211,8 +213,8 @@ class StudentsResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListStudents::route('/'),
             'create' => Pages\CreateStudents::route('/create'),
+            'index' => Pages\ListStudents::route('/'),
             'edit' => Pages\EditStudents::route('/{record}/edit'),
             'details' => Pages\StudentDetails::route('/{record}/details'),
             'courses' => Pages\Courses::route('/{record}/courses'),
@@ -223,6 +225,7 @@ class StudentsResource extends Resource
             'assignments' => Pages\Assigments::route('/{record}/assignments'),
         ];
     }
+
 
 
     public static function getBreadCrumb(): string

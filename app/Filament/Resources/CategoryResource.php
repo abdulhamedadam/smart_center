@@ -22,7 +22,11 @@ class CategoryResource extends Resource
     protected static ?string $model = Category::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
+    protected static ?int $sort = 1;
+    public static function getNavigationGroup(): string
+    {
+        return __('common.courses_management');
+    }
 
     public static function form(Form $form): Form
     {

@@ -40,6 +40,11 @@ class Instructor extends Model implements HasMedia
     {
         return $this->belongsTo(Country::class,'region_id','id');
     }
+    /**********************************************/
+    public function courses()
+    {
+        return $this->hasMany(Courses::class,'instructor_id','id');
+    }
 
 
 }

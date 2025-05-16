@@ -13,8 +13,9 @@ return [
     | This will allow your users to receive real-time notifications.
     |
     */
+    'update_check_enabled' => false,
     'default' => [
-        'dashboard' => \App\Filament\Pages\Dashboard::class,
+        'dashboard' => \App\Filament\Pages\CrmDashboard::class,
     ],
     'broadcasting' => [
 

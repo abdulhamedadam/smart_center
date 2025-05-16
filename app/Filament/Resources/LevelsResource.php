@@ -18,6 +18,7 @@ class LevelsResource extends Resource
 {
     protected static ?string $model = Levels::class;
     protected static ?string $cluster = Settings::class;
+    protected static ?int $navigationSort = 4;
     public static function canViewAny(): bool
     {
         return true;

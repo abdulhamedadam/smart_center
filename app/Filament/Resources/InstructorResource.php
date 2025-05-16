@@ -31,7 +31,11 @@ class InstructorResource extends Resource
     protected static ?string $model = Instructor::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
+    protected static ?int $sort = 3;
+    public static function getNavigationGroup(): string
+    {
+        return __('common.users_management');
+    }
     public static function form(Form $form): Form
     {
         return $form
@@ -59,6 +63,8 @@ class InstructorResource extends Resource
                             ->label(__('common.city_id'))
                             ->options(Country::whereNull('parent_id')->pluck('name', 'id'))
                             ->live()
+                            ->preload()
+                            ->searchable()
                             ->nullable()
                             ->suffixAction(
                                 Action::make('addCity')
@@ -89,6 +95,8 @@ class InstructorResource extends Resource
                                 return City::where('parent_id', $cityId)->pluck('name', 'id');
                             })
                             ->nullable()
+                            ->preload()
+                            ->searchable()
                             ->suffixAction(
                                 Action::make('addRegion')
                                     ->icon('heroicon-o-plus')
@@ -214,14 +222,17 @@ class InstructorResource extends Resource
                     ->label(__('common.City')),
             ])
             ->actions([
-
+                \Filament\Tables\Actions\ActionGroup::make([
                     Tables\Actions\EditAction::make(),
                     Tables\Actions\DeleteAction::make(),
                     Tables\Actions\Action::make('details')
                         ->label(__('common.Details'))
                         ->icon('heroicon-o-eye')
-                        ->url(fn($record) => static::getUrl('details', ['record' => $record])),
-
+                        ->url(fn ($record) => static::getUrl('details', ['record' => $record])),
+                ])
+                    ->dropdown()
+                    ->label(__('common.Actions'))
+                    ->icon('heroicon-m-ellipsis-vertical'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

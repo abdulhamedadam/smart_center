@@ -19,4 +19,22 @@ class CourseInstallments extends Model
     {
         return $this->hasOne(PaymentTransactions::class,'installment_id','id');
     }
+    //------------------------------------------------------------------------------------------------------------------
+    public function student()
+    {
+        return $this->belongsTo(Students::class);
+    }
+
+    public function course()
+    {
+        return $this->belongsTo(Courses::class);
+    }
+
+    public function installment()
+    {
+        return $this->belongsTo(CourseInstallments::class, 'id');
+    }
+
+
+
 }

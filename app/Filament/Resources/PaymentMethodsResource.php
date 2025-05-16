@@ -20,12 +20,16 @@ class PaymentMethodsResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $cluster = Settings::class;
-
+    protected static ?int $navigationSort = 5;
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                //
+                Forms\Components\Section::make()->schema([
+                    Forms\Components\TextInput::make('name')
+                        ->label(__('common.Name'))
+                        ->required()
+                ]),
             ]);
     }
 
@@ -33,7 +37,7 @@ class PaymentMethodsResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('name')
             ])
             ->filters([
                 //

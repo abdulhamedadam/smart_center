@@ -285,7 +285,7 @@ class CreateRecord extends Page
         }
 
         if ($resource::hasPage('edit') && $resource::canEdit($this->getRecord())) {
-            return $resource::getUrl('edit', ['record' => $this->getRecord(), ...$this->getRedirectUrlParameters()]);
+            return $resource::getUrl('index');
         }
 
         return $resource::getUrl('index');
