@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('tbl_course_complaints', function (Blueprint $table) {
             $table->id();
             $table->integer('course_id')->nullable();
+            $table->integer('group_id')->nullable();
             $table->integer('student_id')->nullable();
             $table->text('complaint')->nullable();
             $table->integer('status')->default(1)->nullable();

@@ -218,7 +218,6 @@ class Color
     ];
 
     public const Blue = [
-        950 => '23, 37, 84',
         50 => '239, 246, 255',
         100 => '219, 234, 254',
         200 => '191, 219, 254',
@@ -229,7 +228,7 @@ class Color
         700 => '29, 78, 216',
         800 => '30, 64, 175',
         900 => '30, 58, 138',
-
+        950 => '23, 37, 84',
     ];
 
     public const Indigo = [
@@ -316,13 +315,6 @@ class Color
         950 => '76, 5, 25',
     ];
 
-    public const Custom = [
-        '50' => '#faf7f0',
-        '100' => '#f5eedc',
-        '200' => '#ebddb9',
-
-    ];
-
     /**
      * @return array{50: string, 100: string, 200: string, 300: string, 400: string, 500: string, 600: string, 700: string, 800: string, 900: string, 950: string}
      */
@@ -405,7 +397,6 @@ class Color
             'fuchsia' => static::Fuchsia,
             'pink' => static::Pink,
             'rose' => static::Rose,
-            'custom' => static::Custom,
         ];
     }
 }

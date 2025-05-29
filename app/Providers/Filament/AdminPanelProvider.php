@@ -31,13 +31,10 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
-            ->navigationGroups([
-                NavigationGroup::make(__('common.Reports'))
-                    ->items([
-                        \App\Filament\Pages\RevenueReports::class,
-
-                    ]),
-            ])
+            ->collapsibleNavigationGroups(false)
+            ->sidebarFullyCollapsibleOnDesktop()
+            ->sidebarCollapsibleOnDesktop()
+            ->sidebarWidth('15rem')
             ->globalSearchKeyBindings(['command+k', 'ctrl+k'])
             ->globalSearch(true)
             ->colors([

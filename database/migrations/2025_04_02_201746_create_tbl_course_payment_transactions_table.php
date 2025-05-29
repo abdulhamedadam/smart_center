@@ -15,9 +15,13 @@ return new class extends Migration
             $table->id();
             $table->integer('course_payment_id')->nullable();
             $table->integer('installment_id')->nullable();
+            $table->integer('course_id')->nullable();
+            $table->integer('group_id')->nullable();
+            $table->integer('student_id')->nullable();
             $table->decimal('amount',10,2)->nullable();
             $table->string('payment_date')->nullable();
             $table->integer('payment_method_id')->nullable();
+            $table->enum('transaction_type',['initial_payment','installment'])->nullable();
             $table->timestamps();
         });
     }

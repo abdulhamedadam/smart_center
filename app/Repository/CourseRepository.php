@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Interfaces\CourseInterface;
+use App\Models\CourseGroups;
 use App\Models\CourseInstallments;
 use App\Models\CoursePayments;
 use App\Models\Courses;
@@ -51,6 +52,7 @@ class CourseRepository implements CourseInterface
 
         $payment = [
             'course_id' => $data['course_id'],
+            'group_id' => $data['group_id'],
             'student_id' => $data['student_id'],
             'total_amount' => $data['total_price'],
             'paid_amount' => $data['payment_type'] == 'cash' ? $data['total_price'] : $data['initial_payment'] ?? 0 ,
@@ -59,6 +61,7 @@ class CourseRepository implements CourseInterface
         ];
 
         $paymentData = CoursePayments::create($payment);
+       // dd($paymentData->id);
         if (($data['initial_payment'] ?? 0) > 0 ) {
             PaymentTransactions::create([
                 'course_payment_id' => $paymentData->id,
@@ -66,6 +69,9 @@ class CourseRepository implements CourseInterface
                 'payment_date' => now(),
                 'transaction_type' => 'initial_payment',
                 'payment_method_id' => 1,
+                'course_id' => $data['course_id'],
+                'group_id' => $data['group_id'],
+                'student_id' => $data['student_id'],
             ]);
         }
 
@@ -76,6 +82,9 @@ class CourseRepository implements CourseInterface
                 'payment_date' => now(),
                 'transaction_type' => 'initial_payment',
                 'payment_method_id' => 1,
+                'course_id' => $data['course_id'],
+                'group_id' => $data['group_id'],
+                'student_id' => $data['student_id'],
 
             ]);
         }
@@ -84,6 +93,7 @@ class CourseRepository implements CourseInterface
             $this->createInstallments($paymentData, $data);
         }
 
+      //  dd($paymentData);
         return $paymentData;
     }
 
@@ -113,11 +123,17 @@ class CourseRepository implements CourseInterface
                 'due_date' => $dueDate,
                 'course_id' => $payment->course_id,
                 'student_id' => $payment->student_id,
+                'group_id' => $payment->group_id,
                 'status' => 'remaining',
             ]);
 
             $remainingAmount -= $currentAmount;
         }
+    }
+
+    public function get_groups($course_id)
+    {
+        return CourseGroups::where('course_id',$course_id)->get();
     }
 }
 

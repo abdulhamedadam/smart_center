@@ -34,4 +34,9 @@ class CourseService
     {
         return  $this->course_repository->save_payment($course,$data);
     }
+    //------------------------------------------------------------------------------------------------------------------
+    public function get_groups($course_id)
+    {
+        return  $this->course_repository->get_groups($course_id);
+    }
 }

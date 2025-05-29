@@ -17,13 +17,7 @@
         <meta charset="utf-8" />
         <meta name="csrf-token" content="{{ csrf_token() }}" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600&family=Tajawal:wght@500;700&display=swap" rel="stylesheet">
-        <style>
-            h1 , h2 , h3 , h4 , h5 , h6 , p , div , ul , li a , input , button, label, span,option,th,tr,i {
-                font-family: 'Cairo', sans-serif !important;
-                line-height: 1.7;
-            }
-        </style>
+
         @if ($favicon = filament()->getFavicon())
             <link rel="icon" href="{{ $favicon }}" />
         @endif

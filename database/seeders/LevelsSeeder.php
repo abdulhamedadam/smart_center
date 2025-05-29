@@ -36,11 +36,13 @@ class LevelsSeeder extends Seeder
         ];
 
         foreach ($levels as $level) {
-            Levels::create([
-                'name' => $level['name'],
-                'description' => $level['description'],
-              //  'created_by'=>Auth::id()
-            ]);
+            Levels::firstOrCreate(
+                ['name' => $level['name']], // Check if name exists
+                [
+                    'description' => $level['description'],
+                    'created_by' => 1
+                ]
+            );
         }
     }
 

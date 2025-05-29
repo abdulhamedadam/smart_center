@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('tbl_course_tests', function (Blueprint $table) {
             $table->id();
             $table->integer('course_id')->nullable();
+            $table->integer('group_id')->nullable();
             $table->string('title')->nullable();
             $table->text('description')->nullable();
             $table->date('test_date')->nullable();

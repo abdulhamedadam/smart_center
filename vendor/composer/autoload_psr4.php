@@ -7,7 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'voku\\' => array($vendorDir . '/voku/portable-ascii/src/voku'),
-    'phpDocumentor\\Reflection\\' => array($vendorDir . '/phpdocumentor/reflection-common/src', $vendorDir . '/phpdocumentor/reflection-docblock/src', $vendorDir . '/phpdocumentor/type-resolver/src'),
+    'phpDocumentor\\Reflection\\' => array($vendorDir . '/phpdocumentor/reflection-docblock/src', $vendorDir . '/phpdocumentor/type-resolver/src', $vendorDir . '/phpdocumentor/reflection-common/src'),
     'ZipStream\\' => array($vendorDir . '/maennchen/zipstream-php/src'),
     'Whoops\\' => array($vendorDir . '/filp/whoops/src/Whoops'),
     'Webmozart\\Assert\\' => array($vendorDir . '/webmozart/assert/src'),
@@ -109,7 +109,7 @@ return array(
     'Filament\\Infolists\\' => array($vendorDir . '/filament/infolists/src'),
     'Filament\\Forms\\' => array($vendorDir . '/filament/forms/src'),
     'Filament\\Actions\\' => array($vendorDir . '/filament/actions/src'),
-    'Filament\\' => array($vendorDir . '/filament/filament/src', $vendorDir . '/filament/spatie-laravel-media-library-plugin/src'),
+    'Filament\\' => array($vendorDir . '/filament/spatie-laravel-media-library-plugin/src', $vendorDir . '/filament/filament/src'),
     'Fidry\\CpuCoreCounter\\' => array($vendorDir . '/fidry/cpu-core-counter/src'),
     'Faker\\' => array($vendorDir . '/fakerphp/faker/src/Faker'),
     'Egulias\\EmailValidator\\' => array($vendorDir . '/egulias/email-validator/src'),

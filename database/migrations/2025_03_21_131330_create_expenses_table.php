@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('expense_date')->nullable();
             $table->text('description')->nullable();
             $table->integer('created_by')->nullable();
+            $table->text('notes')->nullable();
             $table->timestamps();
         });
     }

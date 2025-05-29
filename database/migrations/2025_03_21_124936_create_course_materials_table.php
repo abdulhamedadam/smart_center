@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->uuid()->nullable()->unique();
             $table->integer('course_id')->nullable();
+            $table->integer('group_id')->nullable();
             $table->string('title')->nullable();
             $table->string('file_path')->nullable();
             $table->integer('created_by')->nullable();

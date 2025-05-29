@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('tbl_course_payments', function (Blueprint $table) {
             $table->id();
             $table->integer('course_id')->nullable();
+            $table->integer('group_id')->nullable();
             $table->integer('student_id')->nullable();
             $table->decimal('total_amount',10,2)->nullable();
             $table->decimal('paid_amount',10,2)->nullable();

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->uuid()->nullable()->unique();
             $table->integer('course_id')->nullable();
+            $table->integer('group_id')->nullable();
             $table->integer('student_id')->nullable();
             $table->string('date')->nullable();
             $table->enum('status',[1,2,3]);

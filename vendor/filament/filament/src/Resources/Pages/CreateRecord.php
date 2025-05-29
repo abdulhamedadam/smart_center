@@ -19,8 +19,6 @@ use Illuminate\Database\Eloquent\Relations\HasOneOrManyThrough;
 use Illuminate\Support\Js;
 use Throwable;
 
-use function Filament\Support\is_app_url;
-
 /**
  * @property Form $form
  */
@@ -126,7 +124,7 @@ class CreateRecord extends Page
 
         $redirectUrl = $this->getRedirectUrl();
 
-        $this->redirect($redirectUrl, navigate: FilamentView::hasSpaMode() && is_app_url($redirectUrl));
+        $this->redirect($redirectUrl, navigate: FilamentView::hasSpaMode($redirectUrl));
     }
 
     protected function getCreatedNotification(): ?Notification
@@ -285,7 +283,7 @@ class CreateRecord extends Page
         }
 
         if ($resource::hasPage('edit') && $resource::canEdit($this->getRecord())) {
-            return $resource::getUrl('index');
+            return $resource::getUrl('edit', ['record' => $this->getRecord(), ...$this->getRedirectUrlParameters()]);
         }
 
         return $resource::getUrl('index');
