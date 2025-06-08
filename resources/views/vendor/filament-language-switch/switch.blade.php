@@ -26,7 +26,7 @@
                     :switch="true"
                 />
             @else
-                <span class="font-semibold text-md">{{ $languageSwitch->getCharAvatar(app()->getLocale()) }}</span>
+                <span class="font-semibold text-md">{{ $languageSwitch->getLabel(app()->getLocale()) }}</span>
             @endif
         </div>
     </x-slot>
@@ -60,24 +60,6 @@
                             class="w-7 h-7"
                         />
                     @else
-                        @if ($hasFlags)
-                            <x-filament-language-switch::flag
-                                :src="$languageSwitch->getFlag($locale)"
-                                :circular="$isCircular"
-                                :alt="$languageSwitch->getLabel($locale)"
-                                class="w-7 h-7"
-                            />
-                        @else
-                            <span
-                                @class([
-                                    'flex items-center justify-center flex-shrink-0 w-7 h-7 p-2 text-xs font-semibold group-hover:bg-white group-hover:text-primary-600 group-hover:border group-hover:border-primary-500/10 group-focus:text-white bg-primary-500/10 text-primary-600',
-                                    'rounded-full' => $isCircular,
-                                    'rounded-lg' => !$isCircular,
-                                ])
-                            >
-                                {{ $languageSwitch->getCharAvatar($locale) }}
-                            </span>
-                        @endif
                         <span class="text-sm font-medium text-gray-600 hover:bg-transparent dark:text-gray-200">
                             {{ $languageSwitch->getLabel($locale) }}
                         </span>

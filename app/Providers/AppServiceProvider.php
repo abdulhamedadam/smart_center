@@ -49,13 +49,10 @@ class AppServiceProvider extends ServiceProvider
             $switch
                 ->locales(['ar', 'en'])
                 ->flags([
-                    'ar' => asset('build/flags/arabic-flag.png'),
-                    'en' => asset('build/flags/english-flag.png'),
-                ])
-                ->circular();
+                    'ar' => url('build/flags/arabic-flag.png'),
+                    'en' => url('build/flags/english-flag.png'),
+                ]);
         });
-
-        // Set the application locale based on the user's preference
         if (session()->has('locale')) {
             app()->setLocale(session('locale'));
         }

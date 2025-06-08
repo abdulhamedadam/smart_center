@@ -24,9 +24,20 @@ class GlobalSchedules extends Page implements HasTable
     protected static ?string $navigationLabel = 'All Schedules';
     protected static ?int $navigationSort = 3;
     protected static string $view = 'filament.pages.global-schedules';
+
     public static function getNavigationGroup(): string
     {
         return __('common.courses_management');
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('common.all_schedules');
+    }
+
+    public function getTitle(): string
+    {
+        return __('common.all_schedules');
     }
 
     public function table(Table $table): Table
@@ -64,25 +75,28 @@ class GlobalSchedules extends Page implements HasTable
                             ->schema([
                                 Select::make('day')
                                     ->options([
-                                        'saturday' => 'Saturday',
-                                        'sunday' => 'Sunday',
-                                        'monday' => 'Monday',
-                                        'tuesday' => 'Tuesday',
-                                        'wednesday' => 'Wednesday',
-                                        'thursday' => 'Thursday',
-                                        'friday' => 'Friday',
+                                        'saturday' => __('common.saturday'),
+                                        'sunday' => __('common.sunday'),
+                                        'monday' => __('common.monday'),
+                                        'tuesday' => __('common.tuesday'),
+                                        'wednesday' => __('common.wednesday'),
+                                        'thursday' => __('common.thursday'),
+                                        'friday' => __('common.friday'),
                                     ])
+                                    ->label(__('common.day'))
                                     ->required(),
                                 TimePicker::make('start_time')
+                                    ->label(__('common.start_time'))
                                     ->required(),
                                 TimePicker::make('end_time')
+                                    ->label(__('common.end_time'))
                                     ->required(),
                             ])
                             ->columns(3)
                             ->defaultItems(0)
                             ->reorderable(false)
-                            ->addActionLabel('Add Day')
-                            ->label('Schedule Days')
+                            ->addActionLabel(__('common.add_day'))
+                            ->label(__('common.schedule_days'))
                             ->relationship('groupDays')
                             ->afterStateHydrated(function ($component, $state) {
                                 if (is_array($state)) {
@@ -101,13 +115,13 @@ class GlobalSchedules extends Page implements HasTable
     protected function getDayColumns(): array
     {
         $days = [
-            'saturday' => 'Sat',
-            'sunday' => 'Sun',
-            'monday' => 'Mon',
-            'tuesday' => 'Tue',
-            'wednesday' => 'Wed',
-            'thursday' => 'Thu',
-            'friday' => 'Fri',
+             'saturday' => __('common.saturday'),
+                                        'sunday' => __('common.sunday'),
+                                        'monday' => __('common.monday'),
+                                        'tuesday' => __('common.tuesday'),
+                                        'wednesday' => __('common.wednesday'),
+                                        'thursday' => __('common.thursday'),
+                                        'friday' => __('common.friday'),
         ];
 
         $columns = [];

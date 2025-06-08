@@ -326,7 +326,7 @@ class Attendance extends Page implements HasForms, HasTable
             'updated_by' => Auth::id(),
         ]);
 
-        // Save attendance details
+        
         foreach ($data['attendance'] as $attendance) {
             CourseAttendanceDetails::updateOrCreate([
                 'attendance_id' => $mainAttendance->id,
