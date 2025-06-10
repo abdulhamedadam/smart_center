@@ -2,23 +2,45 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
 class Instructor extends Model implements HasMedia
 {
-    use InteractsWithMedia;
+    use HasFactory, SoftDeletes, InteractsWithMedia;
 
     protected $table = 'tbl_instructors';
-    protected $guarded = [];
 
+    protected $fillable = [
+        'name',
+        'email',
+        'phone',
+        'city_id',
+        'region_id',
+        'address1',
+        'gender',
+        'date_of_birth',
+        'specialization',
+        'qualifications',
+        'experience',
+        'bio',
+        'status',
+        'hire_date',
+        'administrative_notes',
+    ];
 
     /**********************************************/
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('instructor')
+            ->useDisk('public')
+            ->singleFile();
+
+        $this->addMediaCollection('instructor_cv')
             ->useDisk('public')
             ->singleFile();
     }
@@ -43,8 +65,7 @@ class Instructor extends Model implements HasMedia
     /**********************************************/
     public function courses()
     {
-        return $this->hasMany(Courses::class,'instructor_id','id');
+        return $this->belongsToMany(Courses::class, 'tbl_course_instructor', 'instructor_id', 'course_id');
     }
-
 
 }

@@ -88,6 +88,9 @@ class Courses extends Model
         return $this->hasMany(CoursePayments::class, 'course_id');
     }
 
-
+    public function instructors()
+    {
+        return $this->belongsToMany(Instructor::class, 'tbl_course_instructor', 'course_id', 'instructor_id');
+    }
 
 }

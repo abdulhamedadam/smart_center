@@ -17,8 +17,8 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class LeadsResource extends Resource
 {
     protected static ?string $model = CrmLeads::class;
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-    protected static ?int $navigationSort = 12;
+    protected static ?string $navigationIcon = 'heroicon-o-user-plus';
+    protected static ?int $navigationSort = 13;
     public static function getNavigationBadge(): ?string
     {
         return static::getModel()::count();

@@ -13,7 +13,7 @@ class CrmDashboard extends Page
     protected static ?string $navigationIcon = 'heroicon-o-chart-bar';
     protected static ?string $navigationLabel = 'CRM Dashboard';
     protected static ?string $title = 'CRM Analytics';
-    protected static ?int $navigationSort = 2;
+    protected static ?int $navigationSort = 12;
     public static function getNavigationGroup(): ?string
     {
         return __('common.crm');

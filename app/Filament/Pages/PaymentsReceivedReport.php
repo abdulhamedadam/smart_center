@@ -19,7 +19,7 @@ class PaymentsReceivedReport extends Page
 {
     protected static string $view = 'filament.pages.payments-received-report';
     protected static ?string $navigationIcon = 'heroicon-o-currency-dollar';
-    protected static ?int $navigationSort = 16;
+    protected static ?int $navigationSort = 11;
     public static function getNavigationGroup(): string
     {
         return __('common.Financial');

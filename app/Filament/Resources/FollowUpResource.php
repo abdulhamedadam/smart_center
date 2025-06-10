@@ -18,8 +18,8 @@ class FollowUpResource extends Resource
 {
     protected static ?string $model = CrmFollowUps::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-    protected static ?int $navigationSort = 13;
+    protected static ?string $navigationIcon = 'heroicon-o-chat-bubble-left-right';
+    protected static ?int $navigationSort = 14;
     public static function getNavigationBadge(): ?string
     {
         return static::getModel()::count();
@@ -163,7 +163,7 @@ class FollowUpResource extends Resource
 
     public static function getLabel(): string
     {
-        return __('common.follow_ups');
+        return __('common.follow_up');
     }
 
     public static function getModelLabel(): string

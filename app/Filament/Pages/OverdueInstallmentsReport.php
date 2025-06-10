@@ -18,7 +18,7 @@ class OverdueInstallmentsReport extends Page
 {
     protected static string $view = 'filament.pages.overdue-installments-report';
     protected static ?string $navigationIcon = 'heroicon-o-exclamation-triangle';
-    protected static ?int $navigationSort = 15;
+    protected static ?int $navigationSort = 10;
     public static function getNavigationGroup(): string
     {
         return __('common.Financial');

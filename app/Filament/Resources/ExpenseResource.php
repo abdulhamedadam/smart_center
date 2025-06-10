@@ -16,7 +16,7 @@ class ExpenseResource extends Resource
 {
     protected static ?string $model = Expenses::class;
     protected static ?string $navigationIcon = 'heroicon-o-banknotes';
-    protected static ?int $navigationSort = 11;
+    protected static ?int $navigationSort = 8;
     public static function getNavigationBadge(): ?string
     {
         return static::getModel()::count();

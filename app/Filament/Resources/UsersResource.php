@@ -17,14 +17,17 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class UsersResource extends Resource
 {
     protected static ?string $model = User::class;
+    
     public static function getNavigationBadge(): ?string
     {
         return static::getModel()::count();
     }
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-    protected static ?int $navigationSort = 16;
-
-    protected static ?int $sort = 3;
+    protected static ?string $navigationIcon = 'heroicon-o-users';
+    protected static ?int $navigationSort = 18;
+      public static function getNavigationGroup(): string
+    {
+        return __('common.general');
+    }
 //    public static function getNavigationGroup(): string
 //    {
 //        return __('common.users_management');

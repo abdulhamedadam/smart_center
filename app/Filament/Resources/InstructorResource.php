@@ -25,13 +25,19 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class InstructorResource extends Resource
 {
     protected static ?string $model = Instructor::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-    protected static ?int $navigationSort = 7;
+    protected static ?string $navigationIcon = 'heroicon-o-academic-cap';
+    protected static ?int $navigationSort = 15;
+    public static function getNavigationGroup(): string
+    {
+        return __('common.general');
+    }
+
     public static function getNavigationBadge(): ?string
     {
         return static::getModel()::count();
@@ -50,52 +56,42 @@ class InstructorResource extends Resource
     {
         return $form
             ->schema([
-                \Filament\Forms\Components\Section::make()
-                    ->columns(3)
+                Forms\Components\Section::make(__('common.basic_info'))
                     ->schema([
-                        // Row 1
-                        TextInput::make('name')
+                        Forms\Components\TextInput::make('name')
                             ->label(__('common.name'))
-                            ->nullable(),
-
-                        TextInput::make('email')
+                            ->required(),
+                        Forms\Components\TextInput::make('email')
                             ->label(__('common.email'))
                             ->email()
-                            ->nullable(),
-
-                        TextInput::make('phone')
+                            ->required(),
+                        Forms\Components\TextInput::make('phone')
                             ->label(__('common.phone'))
                             ->tel()
-                            ->nullable(),
-
-                        // Row 2
-                        Select::make('city_id')
+                            ->required(),
+                        Forms\Components\Select::make('city_id')
                             ->label(__('common.city_id'))
                             ->options(Country::whereNull('parent_id')->pluck('name', 'id'))
                             ->live()
                             ->preload()
                             ->searchable()
-                            ->nullable()
+                            ->required()
                             ->suffixAction(
-                                Action::make('addCity')
+                                Forms\Components\Actions\Action::make('addCity')
                                     ->icon('heroicon-o-plus')
                                     ->form([
-                                        TextInput::make('name')
+                                        Forms\Components\TextInput::make('name')
                                             ->required()
                                             ->label(__('common.Name')),
-
                                     ])
                                     ->action(function (array $data) {
                                         $country = Country::create([
                                             'name' => $data['name'],
                                             'parent_id' => null,
                                         ]);
-
-
                                     })
                             ),
-
-                        Select::make('region_id')
+                        Forms\Components\Select::make('region_id')
                             ->label(__('common.region_id'))
                             ->options(function (Get $get) {
                                 $cityId = $get('city_id');
@@ -104,73 +100,101 @@ class InstructorResource extends Resource
                                 }
                                 return City::where('parent_id', $cityId)->pluck('name', 'id');
                             })
-                            ->nullable()
+                            ->required()
                             ->preload()
                             ->searchable()
                             ->suffixAction(
-                                Action::make('addRegion')
+                                Forms\Components\Actions\Action::make('addRegion')
                                     ->icon('heroicon-o-plus')
                                     ->form([
-                                        Forms\Components\Grid::make(2) // This creates a 2-column layout
-                                        ->schema([
-                                            Forms\Components\Select::make('parent_id')
-                                                ->options(
-                                                    City::whereNull('parent_id')
-                                                        ->pluck('name', 'id')
-                                                )
-                                                ->searchable()
-                                                ->preload()
-                                                ->required()
-                                                ->label(__('common.Country'))
-                                                ->native(false),
-                                            TextInput::make('name')
-                                                ->required()
-                                                ->label(__('common.Name')),
-                                        ]),
+                                        Forms\Components\Grid::make(2)
+                                            ->schema([
+                                                Forms\Components\Select::make('parent_id')
+                                                    ->options(
+                                                        City::whereNull('parent_id')
+                                                            ->pluck('name', 'id')
+                                                    )
+                                                    ->searchable()
+                                                    ->preload()
+                                                    ->required()
+                                                    ->label(__('common.Country'))
+                                                    ->native(false),
+                                                Forms\Components\TextInput::make('name')
+                                                    ->required()
+                                                    ->label(__('common.Name')),
+                                            ]),
                                     ])
                                     ->action(function (array $data) {
-                                        $record['name']=$data['name'];
-                                        $record['parent_id']=$data['parent_id'];
-                                       // dd($record);
+                                        $record['name'] = $data['name'];
+                                        $record['parent_id'] = $data['parent_id'];
                                         $region = City::create($record);
                                     })
                             ),
-                        TextInput::make('address1')
+                        Forms\Components\TextInput::make('address1')
                             ->label(__('common.address1'))
-                            ->nullable(),
+                            ->required(),
+                        Forms\Components\Select::make('gender')
+                            ->label(__('common.gender'))
+                            ->options([
+                                1 => __('common.male'),
+                                2 => __('common.female'),
+                            ])
+                            ->required(),
+                        Forms\Components\DatePicker::make('date_of_birth')
+                            ->label(__('common.date_of_birth'))
+                            ->required(),
+                        Forms\Components\FileUpload::make('image')
+                            ->label(__('common.image'))
+                            ->image()
+                            ->directory('instructors')
+                            ->required(),
+                    ])->columns(2),
 
-
-                        TextInput::make('experience')
+                Forms\Components\Section::make(__('common.specialization_and_qualifications'))
+                    ->schema([
+                        Forms\Components\TextInput::make('specialization')
+                            ->label(__('common.specialization'))
+                            ->required(),
+                        Forms\Components\TextInput::make('qualifications')
+                            ->label(__('common.qualifications'))
+                            ->required(),
+                        Forms\Components\TextInput::make('experience')
                             ->label(__('common.experience'))
                             ->numeric()
-                            ->nullable(),
-
-                        TextInput::make('qualifications')
-                            ->label(__('common.qualifications'))
-                            ->nullable(),
-
-
-                        SpatieMediaLibraryFileUpload::make('instructor')
-                            ->collection('instructor')
-                            ->label(__('common.Image'))
-                            ->image()
-                            ->responsiveImages()
-                            ->disk('public')
-                            ->rules(['image', 'max:2048']),
-
-
-                        // Row 5
-                        TextInput::make('course_percentage')
-                            ->label(__('common.course_percentage'))
-                            ->numeric()
-                            ->suffix('%')
-                            ->nullable(),
-
-                        Textarea::make('bio')
+                            ->required(),
+                        Forms\Components\Textarea::make('bio')
                             ->label(__('common.bio'))
-                            ->columnSpanFull()
-                            ->nullable(),
-                    ]),
+                            ->required(),
+                        Forms\Components\FileUpload::make('cv')
+                            ->label(__('common.cv'))
+                            ->directory('instructors/cv')
+                            ->acceptedFileTypes(['application/pdf'])
+                            ->required(),
+                    ])->columns(2),
+
+                Forms\Components\Section::make(__('common.administrative_data'))
+                    ->schema([
+                        Forms\Components\Select::make('status')
+                            ->label(__('common.status'))
+                            ->options([
+                                1 => __('common.active'),
+                                0 => __('common.inactive'),
+                            ])
+                            ->default(1)
+                            ->required(),
+                        Forms\Components\Select::make('courses')
+                            ->label(__('common.courses'))
+                            ->multiple()
+                            ->preload()
+                            ->relationship('courses', 'name')
+                            ->required(),
+                        Forms\Components\DatePicker::make('hire_date')
+                            ->label(__('common.hire_date'))
+                            ->required(),
+                        Forms\Components\Textarea::make('administrative_notes')
+                            ->label(__('common.administrative_notes'))
+                            ->required(),
+                    ])->columns(2),
             ]);
     }
 
@@ -178,75 +202,40 @@ class InstructorResource extends Resource
     {
         return $table
             ->columns([
-                SpatieMediaLibraryImageColumn::make('image')
-                    ->label(__('common.Image'))
-                    ->collection('instructor')
-                    ->disk('')
-                    ->toggleable(isToggledHiddenByDefault: false)
-                    ->circular(),
-
-                TextColumn::make('name')
+                Tables\Columns\TextColumn::make('name')
                     ->label(__('common.name'))
-                    ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: false)
-                    ->sortable(),
-
-                TextColumn::make('email')
-                    ->label(__('common.email'))
-                    ->toggleable(isToggledHiddenByDefault: false)
                     ->searchable(),
-
-                TextColumn::make('phone')
-                    ->toggleable(isToggledHiddenByDefault: false)
-                    ->label(__('common.phone')),
-
-                TextColumn::make('Country.name')
-                    ->label(__('common.Country'))
-                    ->toggleable(isToggledHiddenByDefault: true)
+                Tables\Columns\TextColumn::make('email')
+                    ->label(__('common.email'))
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('phone')
+                    ->label(__('common.phone'))
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('specialization')
+                    ->label(__('common.specialization'))
+                    ->searchable(),
+                Tables\Columns\IconColumn::make('status')
+                    ->label(__('common.status'))
+                    ->boolean()
+                    ->trueIcon('heroicon-o-check-circle')
+                    ->falseIcon('heroicon-o-x-circle'),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->label(__('common.created_at'))
+                    ->dateTime()
                     ->sortable(),
-
-                TextColumn::make('City.name')
-                    ->toggleable(isToggledHiddenByDefault: true)
-                    ->label(__('common.City')),
-
-                TextColumn::make('experience')
-                    ->label(__('common.experience'))
-                    ->suffix(' yrs')
-                    ->toggleable(isToggledHiddenByDefault: false)
-                    ->sortable(),
-
-                TextColumn::make('course_percentage')
-                    ->label(__('common.course_percentage'))
-                    ->suffix('%')
-                    ->toggleable(isToggledHiddenByDefault: false)
-                    ->sortable(),
-
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('city')
-                    ->relationship('Country', 'name')
-                    ->label(__('common.Country')),
-
-                Tables\Filters\SelectFilter::make('region')
-                    ->relationship('City', 'name')
-                    ->label(__('common.City')),
+                Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
-                \Filament\Tables\Actions\ActionGroup::make([
-                    Tables\Actions\EditAction::make(),
-                    Tables\Actions\DeleteAction::make(),
-                    Tables\Actions\Action::make('details')
-                        ->label(__('common.Details'))
-                        ->icon('heroicon-o-eye')
-                        ->url(fn ($record) => static::getUrl('details', ['record' => $record])),
-                ])
-                    ->dropdown()
-                    ->label(__('common.Actions'))
-                    ->icon('heroicon-m-ellipsis-vertical'),
+                Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\ForceDeleteBulkAction::make(),
+                    Tables\Actions\RestoreBulkAction::make(),
                 ]),
             ]);
     }
@@ -268,6 +257,13 @@ class InstructorResource extends Resource
         ];
     }
 
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
+    }
 
     // LOCALIZATION =====================================================================
     // LOCALIZATION =====================================================================

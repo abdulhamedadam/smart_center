@@ -70,6 +70,21 @@ class Students extends Model implements HasMedia
         return $this->hasMany(CourseAttendanceDetails::class,'student_id','id');
     }
 
+    public function paymentMethod()
+    {
+        return $this->belongsTo(PaymentMethods::class, 'payment_method_id');
+    }
+
+    public function Country()
+    {
+        return $this->belongsTo(Country::class, 'city_id', 'id');
+    }
+
+    public function City()
+    {
+        return $this->belongsTo(Country::class, 'region_id', 'id');
+    }
+
     // Attribute methods
     protected function coursesCount()
     {

@@ -28,7 +28,7 @@ class CoursesResource extends Resource
 {
     protected static ?string $model = Courses::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-book-open';
     protected static ?int $navigationSort = 5;
     public static function getNavigationBadge(): ?string
     {

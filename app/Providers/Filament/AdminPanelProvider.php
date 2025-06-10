@@ -34,7 +34,7 @@ class AdminPanelProvider extends PanelProvider
             ->collapsibleNavigationGroups(false)
             ->sidebarFullyCollapsibleOnDesktop()
             ->sidebarCollapsibleOnDesktop()
-            ->sidebarWidth('15rem')
+            ->sidebarWidth('17rem')
             ->globalSearchKeyBindings(['command+k', 'ctrl+k'])
             ->globalSearch(true)
             ->colors([

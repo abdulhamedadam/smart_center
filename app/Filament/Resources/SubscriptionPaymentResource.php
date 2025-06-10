@@ -18,7 +18,7 @@ class SubscriptionPaymentResource extends Resource
 {
     protected static ?string $model = CoursePayments::class;
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-    protected static ?int $navigationSort = 9;
+    protected static ?int $navigationSort = 1;
 //    protected static ?int $sort = 3;
     public static function getNavigationGroup(): string
     {

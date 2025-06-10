@@ -29,7 +29,7 @@ class AttendanceResource extends Resource
     protected static ?string $model = CourseAttendance::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-calendar';
-    protected static ?int $navigationSort = 10;
+    protected static ?int $navigationSort = 6;
     public static function getNavigationGroup(): string
     {
         return __('common.courses_management');

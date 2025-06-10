@@ -21,12 +21,12 @@ class CategoryResource extends Resource
 {
     protected static ?string $model = Category::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-tag';
     public static function getNavigationBadge(): ?string
     {
         return static::getModel()::count();
     }
-    protected static ?int $navigationSort = 4;
+    protected static ?int $navigationSort = 3;
 //    protected static ?int $sort = 1;
     public static function getNavigationGroup(): string
     {

@@ -17,7 +17,7 @@ class CourseGroupResource extends Resource
 {
     protected static ?string $model = CourseGroups::class;
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
-    protected static ?int $navigationSort = 6;
+    protected static ?int $navigationSort = 4;
     public static function getNavigationBadge(): ?string
     {
         return static::getModel()::count();

@@ -14,13 +14,20 @@ use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Models\Country;
+use App\Models\City;
+use Filament\Forms\Components\Actions\Action;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Get;
 
 class StudentsResource extends Resource
 {
     protected static ?string $model = Students::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-academic-cap';
-    protected static ?int $navigationSort = 8;
+    protected static ?int $navigationSort = 16;
     public static function getNavigationBadge(): ?string
     {
         return static::getModel()::count();
@@ -30,6 +37,10 @@ class StudentsResource extends Resource
     public static function getGlobalSearchResultUrl($model): string
     {
         return StudentsResource::getUrl('details', ['record' => $model->id]);
+    }
+    public static function getNavigationGroup(): string
+    {
+        return __('common.general');
     }
   //  protected static ?int $sort = 1;
 //    public static function getNavigationGroup(): string
@@ -54,41 +65,116 @@ class StudentsResource extends Resource
                             ->label(__('common.Phone'))
                             ->tel()
                             ->required(),
+                        Forms\Components\Select::make('city_id')
+                            ->label(__('common.city_id'))
+                            ->options(Country::whereNull('parent_id')->pluck('name', 'id'))
+                            ->live()
+                            ->preload()
+                            ->searchable()
+                            ->required()
+                            ->suffixAction(
+                                Forms\Components\Actions\Action::make('addCity')
+                                    ->icon('heroicon-o-plus')
+                                    ->form([
+                                        Forms\Components\TextInput::make('name')
+                                            ->required()
+                                            ->label(__('common.Name')),
+                                    ])
+                                    ->action(function (array $data) {
+                                        $country = Country::create([
+                                            'name' => $data['name'],
+                                            'parent_id' => null,
+                                        ]);
+                                    })
+                            ),
+                        Forms\Components\Select::make('region_id')
+                            ->label(__('common.region_id'))
+                            ->options(function (Get $get) {
+                                $cityId = $get('city_id');
+                                if (!$cityId) {
+                                    return [];
+                                }
+                                return City::where('parent_id', $cityId)->pluck('name', 'id');
+                            })
+                            ->required()
+                            ->preload()
+                            ->searchable()
+                            ->suffixAction(
+                                Forms\Components\Actions\Action::make('addRegion')
+                                    ->icon('heroicon-o-plus')
+                                    ->form([
+                                        Forms\Components\Grid::make(2)
+                                            ->schema([
+                                                Forms\Components\Select::make('parent_id')
+                                                    ->options(
+                                                        City::whereNull('parent_id')
+                                                            ->pluck('name', 'id')
+                                                    )
+                                                    ->searchable()
+                                                    ->preload()
+                                                    ->required()
+                                                    ->label(__('common.Country'))
+                                                    ->native(false),
+                                                Forms\Components\TextInput::make('name')
+                                                    ->required()
+                                                    ->label(__('common.Name')),
+                                            ]),
+                                    ])
+                                    ->action(function (array $data) {
+                                        $record['name'] = $data['name'];
+                                        $record['parent_id'] = $data['parent_id'];
+                                        $region = City::create($record);
+                                    })
+                            ),
+                        Forms\Components\TextInput::make('address')
+                            ->label(__('common.Address'))
+                            ->required(),
                         Forms\Components\Select::make('gender')
                             ->label(__('common.Gender'))
                             ->options([
-                                'male' => __('common.Male'),
-                                'female' => __('common.Female'),
+                                1 => __('common.Male'),
+                               2 => __('common.Female'),
                             ])
                             ->required(),
                         Forms\Components\DatePicker::make('date_of_birth')
                             ->label(__('common.DateOfBirth'))
                             ->required(),
-
-                        Forms\Components\TextInput::make('address')
-                            ->label(__('common.Address'))
-                            ->required(),
+                        SpatieMediaLibraryFileUpload::make('profile_image')
+                            ->collection('students')
+                            ->label(__('common.ProfileImage'))
+                            ->image()
+                            ->responsiveImages()
+                            ->disk('public')
+                            ->rules(['image', 'max:2048']),
                     ])
                     ->columns(3),
 
-
-                Forms\Components\Section::make(__('common.GuardianInformation'))
+                Forms\Components\Section::make(__('common.AcademicInformation'))
                     ->schema([
-                        Forms\Components\TextInput::make('guardian_name')
-                            ->label(__('common.GuardianName'))
+                        Forms\Components\TextInput::make('educational_qualification')
+                            ->label(__('common.EducationalQualification'))
                             ->required(),
-                        Forms\Components\TextInput::make('guardian_phone')
-                            ->label(__('common.GuardianPhone'))
-                            ->tel()
+                        Forms\Components\TextInput::make('field_of_study')
+                            ->label(__('common.FieldOfStudy'))
                             ->required(),
+                        Forms\Components\TextInput::make('educational_institution')
+                            ->label(__('common.EducationalInstitution'))
+                            ->helperText(__('common.EducationalInstitutionHelp'))
+                            ->required(),
+                        SpatieMediaLibraryFileUpload::make('cv')
+                            ->collection('students_cv')
+                            ->label(__('common.CV'))
+                            ->acceptedFileTypes(['application/pdf'])
+                            ->disk('public')
+                            ->rules(['file', 'max:5120']),
                     ])
                     ->columns(3),
 
-                Forms\Components\Section::make(__('common.AdditionalInformation'))
+                Forms\Components\Section::make(__('common.AdministrativeInformation'))
                     ->schema([
                         Forms\Components\DatePicker::make('registration_date')
                             ->label(__('common.RegistrationDate'))
-                            ->default(\Carbon\Carbon::now())
+                            ->default(now())
                             ->required(),
                         Forms\Components\Select::make('status')
                             ->label(__('common.Status'))
@@ -97,17 +183,25 @@ class StudentsResource extends Resource
                                 0 => __('common.Inactive'),
                             ])
                             ->required(),
-                        Forms\Components\Textarea::make('notes')
-                            ->label(__('common.Notes')),
-                        SpatieMediaLibraryFileUpload::make('students')
-                            ->collection('students')
-                            ->label(__('common.Image'))
-                            ->image()
-                            ->responsiveImages()
-                            ->disk('public')
-                            ->rules(['image', 'max:2048']),
+                        Forms\Components\Textarea::make('admin_notes')
+                            ->label(__('common.AdminNotes'))
+                            ->helperText(__('common.AdminNotesHelp')),
                     ])
                     ->columns(3),
+
+                Forms\Components\Section::make(__('common.PersonalNotes'))
+                    ->schema([
+                        SpatieMediaLibraryFileUpload::make('id_proof')
+                            ->collection('students_id')
+                            ->label(__('common.IDProof'))
+                            ->acceptedFileTypes(['application/pdf', 'image/*'])
+                            ->disk('public')
+                            ->rules(['file', 'max:2048']),
+                        Forms\Components\Textarea::make('notes')
+                            ->label(__('common.PersonalNotes'))
+                            ->helperText(__('common.PersonalNotesHelp')),
+                    ])
+                    ->columns(2),
             ]);
     }
 

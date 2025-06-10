@@ -3,29 +3,26 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Clusters\Settings;
-use App\Filament\Resources\LevelsResource\Pages;
-use App\Filament\Resources\LevelsResource\RelationManagers;
-use App\Models\Levels;
+use App\Filament\Resources\PaymentStatusResource\Pages;
+use App\Models\PaymentStatus;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class LevelsResource extends Resource
+class PaymentStatusResource extends Resource
 {
-    protected static ?string $model = Levels::class;
+    protected static ?string $model = PaymentStatus::class;
     protected static ?string $cluster = Settings::class;
-    protected static ?int $navigationSort = 4;
+    protected static ?int $navigationSort = 5;
 
     public static function canViewAny(): bool
     {
         return true;
     }
 
-    protected static ?string $navigationIcon = 'heroicon-o-chart-bar';
+    protected static ?string $navigationIcon = 'heroicon-o-credit-card';
 
     public static function form(Form $form): Form
     {
@@ -43,17 +40,10 @@ class LevelsResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')->label(__('common.Name'))
+                Tables\Columns\TextColumn::make('name')
+                    ->label(__('common.Name'))
                     ->sortable()
                     ->searchable(),
-
-                Tables\Columns\TextColumn::make('name')
-                    ->label('المستوى')
-                    ->color(fn (Levels $record) => match($record->name) {
-                        'المبتدئ' => 'primary',
-                        'الاحترافي' => 'success',
-                        default => 'gray'
-                    })
             ])
             ->filters([
                 //
@@ -72,43 +62,38 @@ class LevelsResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageLevels::route('/'),
+            'index' => Pages\ManagePaymentStatus::route('/'),
         ];
     }
 
-
     // LOCALIZATION =====================================================================
-    // LOCALIZATION =====================================================================
-    // LOCALIZATION =====================================================================
-
-
     public static function getBreadCrumb(): string
     {
-        return __('common.levels');
+        return __('common.payment_statuses');
     }
 
     public static function getPluralLabel(): ?string
     {
-        return __('common.levels');
+        return __('common.payment_statuses');
     }
 
     public static function getLabel(): string
     {
-        return __('common.levels');
+        return __('common.payment_statuses');
     }
 
     public static function getModelLabel(): string
     {
-        return __('common.level');
+        return __('common.payment_status');
     }
 
     public static function getPluralModelLabel(): string
     {
-        return __('common.levels');
+        return __('common.payment_statuses');
     }
 
     public static function getNavigationLabel(): string
     {
-        return __('common.levels');
+        return __('common.payment_statuses');
     }
-}
+} 

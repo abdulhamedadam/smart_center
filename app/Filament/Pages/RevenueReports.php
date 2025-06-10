@@ -18,7 +18,7 @@ class RevenueReports extends Page
 {
     protected static string $view = 'filament.pages.revenue-reports';
     protected static ?string $navigationIcon = 'heroicon-o-chart-bar';
-    protected static ?int $navigationSort = 14;
+    protected static ?int $navigationSort = 9;
     public static function getNavigationGroup(): string
     {
         return __('common.Financial');

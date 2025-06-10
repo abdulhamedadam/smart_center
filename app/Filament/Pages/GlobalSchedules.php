@@ -22,7 +22,7 @@ class GlobalSchedules extends Page implements HasTable
 
     protected static ?string $navigationIcon = 'heroicon-o-calendar';
     protected static ?string $navigationLabel = 'All Schedules';
-    protected static ?int $navigationSort = 3;
+    protected static ?int $navigationSort = 2;
     protected static string $view = 'filament.pages.global-schedules';
 
     public static function getNavigationGroup(): string
