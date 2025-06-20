@@ -64,6 +64,13 @@ class FollowUpResource extends Resource
                             ])
                             ->required(),
 
+                        Forms\Components\Select::make('communication_type')
+                            ->label(__('common.communication_type'))
+                            ->relationship('communicationType', 'name')
+                            ->searchable()
+                            ->preload()
+                            ->required(),
+
                         Forms\Components\Textarea::make('note')
                             ->label(__('common.Notes'))
                             ->required()
@@ -85,6 +92,11 @@ class FollowUpResource extends Resource
                 Tables\Columns\TextColumn::make('follow_up_date')
                     ->label(__('common.Follow-upDate'))
                     ->date()
+                    ->sortable(),
+
+                Tables\Columns\TextColumn::make('communicationType.name')
+                    ->label(__('common.communication_type'))
+                    ->searchable()
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('next_follow_up_date')
@@ -126,10 +138,6 @@ class FollowUpResource extends Resource
                         CrmFollowUps::NOT_INTERSTED => 'Not Interested',
                     ]),
 
-                Tables\Filters\Filter::make('upcoming')
-                    ->label('Upcoming Follow-ups')
-                    ->query(fn (Builder $query): Builder => $query->where('follow_up_date', '>=', now()))
-                    ->default(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -138,7 +146,7 @@ class FollowUpResource extends Resource
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
             ])
-            ->defaultSort('follow_up_date', 'asc');
+            ->defaultSort('id', 'desc');
     }
 
 
@@ -168,7 +176,7 @@ class FollowUpResource extends Resource
 
     public static function getModelLabel(): string
     {
-        return __('common.follow_up');
+        return __('common.add_follow_up');
     }
 
     public static function getPluralModelLabel(): string

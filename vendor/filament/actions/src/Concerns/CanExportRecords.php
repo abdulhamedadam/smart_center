@@ -130,7 +130,7 @@ trait CanExportRecords
 
             $records = $action instanceof ExportTableBulkAction ? $action->getRecords() : null;
 
-            $totalRows = $records ? $records->count() : $query->toBase()->getCountForPagination();
+            $totalRows = $records ? $records->count() : $query->count();
             $maxRows = $action->getMaxRows() ?? $totalRows;
 
             if ($maxRows < $totalRows) {
@@ -255,7 +255,7 @@ trait CanExportRecords
             }
         });
 
-        $this->defaultColor('gray');
+        $this->color('gray');
 
         $this->modalWidth('xl');
 

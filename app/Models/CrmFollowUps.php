@@ -17,8 +17,14 @@ class CrmFollowUps extends Model
 
     public function lead()
     {
-        return $this->belongsTo(CrmLeads::class,'lead_id','id');
+        return $this->belongsTo(CrmLeads::class, 'lead_id');
     }
+
+    public function communicationType()
+    {
+        return $this->belongsTo(CrmCommunicationType::class, 'communication_type');
+    }
+
     /*************************************************/
     public function user()
     {

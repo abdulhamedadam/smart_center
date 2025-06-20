@@ -30,7 +30,7 @@ class DeleteBulkAction extends BulkAction
 
         $this->successNotificationTitle(__('filament-actions::delete.multiple.notifications.deleted.title'));
 
-        $this->defaultColor('danger');
+        $this->color('danger');
 
         $this->icon(FilamentIcon::resolve('actions::delete-action') ?? 'heroicon-m-trash');
 

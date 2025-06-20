@@ -13,7 +13,9 @@ return new class extends Migration
     {
         Schema::create('tbl_crm_follow_ups', function (Blueprint $table) {
             $table->id();
-            $table->integer('lead_id')->nullable();
+            $table->foreignId('lead_id')
+                  ->constrained('tbl_crm_leads')
+                  ->onDelete('cascade');
             $table->date('follow_up_date')->nullable();
             $table->date('next_follow_up_date')->nullable();
             $table->text('note')->nullable();

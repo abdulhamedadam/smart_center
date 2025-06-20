@@ -170,17 +170,7 @@ trait HasState
     {
         if (! ($isDehydrated && $this->isDehydrated())) {
             if ($this->hasStatePath()) {
-                $rootContainer = $this->getContainer();
-
-                while (! $rootContainer->isRoot()) {
-                    $rootContainer = $rootContainer->getParentComponent()->getContainer();
-                }
-
-                $statePath = $this->getStatePath();
-
-                if (! $rootContainer->hasDehydratedComponent($statePath)) {
-                    Arr::forget($state, $statePath);
-                }
+                Arr::forget($state, $this->getStatePath());
 
                 return;
             }
@@ -196,10 +186,14 @@ trait HasState
             return;
         }
 
-        if ($this->hasStatePath()) {
+        if ($this->getStatePath(isAbsolute: false)) {
             foreach ($this->getStateToDehydrate() as $key => $value) {
                 Arr::set($state, $key, $value);
             }
+        }
+
+        if ($this->isHiddenAndNotDehydrated()) {
+            return;
         }
 
         foreach ($this->getChildComponentContainers(withHidden: true) as $container) {
@@ -444,11 +438,7 @@ trait HasState
 
     public function isDehydrated(): bool
     {
-        if (! $this->evaluate($this->isDehydrated)) {
-            return false;
-        }
-
-        return ! $this->isHiddenAndNotDehydrated();
+        return (bool) $this->evaluate($this->isDehydrated);
     }
 
     public function isDehydratedWhenHidden(): bool

@@ -408,8 +408,6 @@ return [
 
             'create_option' => [
 
-                'label' => 'Tạo',
-
                 'modal' => [
 
                     'heading' => 'Tạo',
@@ -431,8 +429,6 @@ return [
             ],
 
             'edit_option' => [
-
-                'label' => 'Chỉnh sửa',
 
                 'modal' => [
 

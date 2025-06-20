@@ -5,7 +5,6 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\UsersResource\Pages;
 use App\Filament\Resources\UsersResource\RelationManagers;
 use App\Models\User;
-use App\Models\Users;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,6 +12,9 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class UsersResource extends Resource
 {
@@ -24,20 +26,54 @@ class UsersResource extends Resource
     }
     protected static ?string $navigationIcon = 'heroicon-o-users';
     protected static ?int $navigationSort = 18;
-      public static function getNavigationGroup(): string
+    
+    public static function getNavigationGroup(): string
     {
         return __('common.general');
     }
-//    public static function getNavigationGroup(): string
-//    {
-//        return __('common.users_management');
-//    }
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                //
+                Forms\Components\TextInput::make('name')
+                    ->label(__('common.name'))
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('email')
+                    ->label(__('common.email'))
+                    ->email()
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('current_password')
+                    ->label(__('common.current_password'))
+                    ->password()
+                    ->dehydrated(false)
+                    ->required(fn ($livewire) => $livewire instanceof Pages\EditUser)
+                    ->rule('current_password'),
+                Forms\Components\TextInput::make('password')
+                    ->label(__('common.new_password'))
+                    ->password()
+                    ->required(fn ($livewire) => $livewire instanceof Pages\CreateUser)
+                    ->minLength(8)
+                    ->same('password_confirmation')
+                    ->dehydrated(fn ($state) => filled($state))
+                    ->required(fn ($livewire) => $livewire instanceof Pages\CreateUser),
+                Forms\Components\TextInput::make('password_confirmation')
+                    ->label(__('common.confirm_password'))
+                    ->password()
+                    ->required(fn ($livewire) => $livewire instanceof Pages\CreateUser)
+                    ->minLength(8)
+                    ->dehydrated(false),
+                Forms\Components\Select::make('roles')
+                    ->label(__('common.roles'))
+                    ->multiple()
+                    ->relationship('roles', 'name')
+                    ->preload(),
+                Forms\Components\Toggle::make('is_active')
+                    ->label(__('common.is_active'))
+                    ->default(1)
+                    ->required(),
             ]);
     }
 
@@ -45,13 +81,41 @@ class UsersResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('name')
+                    ->label(__('common.name'))
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('email')
+                    ->label(__('common.email'))
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('roles.name')
+                    ->label(__('common.roles'))
+                    ->badge(),
+                Tables\Columns\IconColumn::make('is_active')
+                    ->label(__('common.is_active'))
+                    ->boolean()
+                    ->getStateUsing(fn ($record) => $record->is_active === 1)
+                    ->trueIcon('heroicon-o-check-circle')
+                    ->falseIcon('heroicon-o-x-circle')
+                    ->trueColor('success')
+                    ->falseColor('danger'),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->label(__('common.created_at'))
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->label(__('common.updated_at'))
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -72,15 +136,12 @@ class UsersResource extends Resource
         return [
             'index' => Pages\ListUsers::route('/'),
             'create' => Pages\CreateUsers::route('/create'),
+            'view' => Pages\ViewUser::route('/{record}'),
             'edit' => Pages\EditUsers::route('/{record}/edit'),
         ];
     }
 
     // LOCALIZATION =====================================================================
-    // LOCALIZATION =====================================================================
-    // LOCALIZATION =====================================================================
-
-
     public static function getBreadCrumb(): string
     {
         return __('common.users');
@@ -110,6 +171,4 @@ class UsersResource extends Resource
     {
         return __('common.users');
     }
-
-
 }

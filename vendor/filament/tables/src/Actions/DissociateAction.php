@@ -29,7 +29,7 @@ class DissociateAction extends Action
 
         $this->successNotificationTitle(__('filament-actions::dissociate.single.notifications.dissociated.title'));
 
-        $this->defaultColor('danger');
+        $this->color('danger');
 
         $this->icon(FilamentIcon::resolve('actions::dissociate-action') ?? 'heroicon-m-x-mark');
 

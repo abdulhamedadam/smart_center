@@ -6,6 +6,8 @@ use App\Filament\Resources\LeadsResource\Pages;
 use App\Filament\Resources\LeadsResource\RelationManagers;
 use App\Models\CrmLeads;
 use App\Models\Leads;
+use App\Models\Courses;
+use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -42,7 +44,6 @@ class LeadsResource extends Resource
             ->schema([
                 Forms\Components\Card::make()
                     ->schema([
-
                         Forms\Components\Grid::make(3)
                             ->schema([
                                 Forms\Components\TextInput::make('name')
@@ -59,30 +60,38 @@ class LeadsResource extends Resource
                                     ->label(__('common.email')),
                             ]),
 
-
                         Forms\Components\Grid::make(3)
                             ->schema([
-
                                 Forms\Components\Select::make('course_id')
                                     ->label(__('common.course'))
-                                    ->options(
-                                        \App\Models\Courses::pluck('name', 'id')
-                                    )
-                                    ->searchable(),
+                                    ->options(Courses::pluck('name', 'id'))
+                                    ->searchable()
+                                    ->preload(),
 
+                                Forms\Components\Select::make('source')
+                                    ->label(__('common.source'))
+                                    ->options(CrmLeads::getSourceLabels())
+                                    ->required(),
 
-                                Forms\Components\TextInput::make('source')
-                                    ->label(__('common.source')),
-
-
-                                Forms\Components\Select::make('assigned_to')
-                                    ->label(__('common.AssignedTo'))
-                                    ->options(
-                                        \App\Models\User::pluck('name', 'id')
-                                    )
-                                    ->searchable(),
+                                Forms\Components\Select::make('status')
+                                    ->label(__('common.status'))
+                                    ->options(CrmLeads::getStatusLabels())
+                                    ->default(CrmLeads::STATUS_NEW)
+                                    ->required(),
                             ]),
 
+                        Forms\Components\Grid::make(2)
+                            ->schema([
+                                Forms\Components\Select::make('assigned_to')
+                                    ->label(__('common.AssignedTo'))
+                                    ->options(User::pluck('name', 'id'))
+                                    ->searchable()
+                                    ->preload(),
+
+                                Forms\Components\DatePicker::make('first_contact_date')
+                                    ->label(__('common.first_contact_date'))
+                                    ->required(),
+                            ]),
 
                         Forms\Components\Textarea::make('note')
                             ->label(__('common.notes'))
@@ -97,8 +106,8 @@ class LeadsResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->searchable()
                     ->label(__('common.name'))
+                    ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('phone')
                     ->label(__('common.phone'))
@@ -107,29 +116,35 @@ class LeadsResource extends Resource
                     ->label(__('common.email'))
                     ->searchable(),
                 Tables\Columns\TextColumn::make('course.name')
-                    ->label(__('common.course_name'))
-                    ->searchable()
+                    ->label(__('common.course'))
                     ->sortable(),
                 Tables\Columns\BadgeColumn::make('status')
                     ->label(__('common.status'))
                     ->colors([
-                        'primary' => CrmLeads::NEW,
-                        'warning' => CrmLeads::CONTACTED,
-                        'success' => CrmLeads::CONVERTED,
-                        'danger' => CrmLeads::NOTINTERSTED.','.CrmLeads::LOST,
+                        'primary' => CrmLeads::STATUS_NEW,
+                        'warning' => CrmLeads::STATUS_CONTACTED,
+                        'info' => CrmLeads::STATUS_NEEDS_FOLLOWUP,
+                        'success' => CrmLeads::STATUS_REGISTERED,
+                        'danger' => CrmLeads::STATUS_NOT_INTERESTED,
                     ])
-                    ->formatStateUsing(fn ($state) => [
-                        CrmLeads::NEW => 'New',
-                        CrmLeads::CONTACTED => 'Contacted',
-                        CrmLeads::CONVERTED => 'Converted',
-                        CrmLeads::NOTINTERSTED => 'Not Interested',
-                        CrmLeads::LOST => 'Lost',
-                    ][$state]),
+                    ->formatStateUsing(fn ($state) => CrmLeads::getStatusLabels()[$state] ?? __('common.unknown'))
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('source')
-                      ->label(__('common.source')),
-                Tables\Columns\TextColumn::make('assignee.name')
-                    ->label(__('common.AssignedTo')),
-
+                    ->label(__('common.source'))
+                    ->formatStateUsing(fn ($state) => CrmLeads::getSourceLabels()[$state] ?? __('common.unknown'))
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('assignedTo.name')
+                    ->label(__('common.AssignedTo'))
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('first_contact_date')
+                    ->label(__('common.first_contact_date'))
+                    ->date()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->label(__('common.created_at'))
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('status')
@@ -152,9 +167,12 @@ class LeadsResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\ViewAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                ]),
             ]);
     }
 

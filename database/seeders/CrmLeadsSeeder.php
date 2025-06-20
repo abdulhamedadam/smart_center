@@ -11,7 +11,7 @@ class CrmLeadsSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    public function run()
+    public function run(): void
     {
         $arabicNames = [
             'محمد أحمد',
@@ -28,8 +28,22 @@ class CrmLeadsSeeder extends Seeder
         $courses = \App\Models\Courses::pluck('id')->toArray();
         $users = \App\Models\User::pluck('id')->toArray();
 
-        $sources = ['website', 'social', 'referral', 'advertisement', 'other'];
-        $statuses = [1, 2, 3, 4];
+        $sources = [
+            CrmLeads::SOURCE_FACEBOOK,
+            CrmLeads::SOURCE_INSTAGRAM,
+            CrmLeads::SOURCE_REFERRAL,
+            CrmLeads::SOURCE_VISIT,
+            CrmLeads::SOURCE_ADS,
+            CrmLeads::SOURCE_OTHER
+        ];
+
+        $statuses = [
+            CrmLeads::STATUS_NEW,
+            CrmLeads::STATUS_CONTACTED,
+            CrmLeads::STATUS_NEEDS_FOLLOWUP,
+            CrmLeads::STATUS_REGISTERED,
+            CrmLeads::STATUS_NOT_INTERESTED
+        ];
 
         foreach ($arabicNames as $name) {
             CrmLeads::create([
@@ -40,6 +54,7 @@ class CrmLeadsSeeder extends Seeder
                 'status' => $statuses[array_rand($statuses)],
                 'source' => $sources[array_rand($sources)],
                 'assigned_to' => $users[array_rand($users)] ?? null,
+                'first_contact_date' => now()->subDays(rand(1, 30)),
                 'note' => 'تم إضافة هذا العميل من خلال السيدر',
                 'created_at' => now()->subDays(rand(1, 30)),
             ]);

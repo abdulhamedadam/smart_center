@@ -57,6 +57,14 @@ class Notification extends ViewComponent implements Arrayable
         return $static;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
+    public function getViewData(): array
+    {
+        return $this->viewData;
+    }
+
     public function toArray(): array
     {
         return [

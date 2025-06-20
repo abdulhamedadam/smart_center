@@ -47,14 +47,11 @@ class AppServiceProvider extends ServiceProvider
     {
         LanguageSwitch::configureUsing(function (LanguageSwitch $switch) {
             $switch
-                ->locales(['ar', 'en'])
+                ->locales(['ar','en'])
                 ->flags([
-                    'ar' => url('build/flags/arabic-flag.png'),
-                    'en' => url('build/flags/english-flag.png'),
+                    'ar' => asset('build/flags/arabic-flag.png'),
+                    'en' => asset('build/flags/english-flag.png'),
                 ]);
         });
-        if (session()->has('locale')) {
-            app()->setLocale(session('locale'));
-        }
     }
 }

@@ -66,7 +66,7 @@ class AssociateAction extends Action
 
         $this->successNotificationTitle(__('filament-actions::associate.single.notifications.associated.title'));
 
-        $this->defaultColor('gray');
+        $this->color('gray');
 
         $this->form(fn (): array => [$this->getRecordSelect()]);
 

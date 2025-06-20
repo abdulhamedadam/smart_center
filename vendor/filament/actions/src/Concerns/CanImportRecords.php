@@ -383,7 +383,7 @@ trait CanImportRecords
                 }),
         ]);
 
-        $this->defaultColor('gray');
+        $this->color('gray');
 
         $this->modalWidth('xl');
 

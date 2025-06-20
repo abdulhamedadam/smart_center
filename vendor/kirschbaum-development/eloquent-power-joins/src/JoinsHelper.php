@@ -188,10 +188,10 @@ class JoinsHelper
                     }
                 }
 
-                $relatedTable = $relation->getRelated()->getTable();
-                if (isset($callback[$relatedTable])) {
-                    $fakeJoinCallback = new FakeJoinCallback($relation->getBaseQuery(), 'inner', $relatedTable);
-                    $callback[$relatedTable]($fakeJoinCallback);
+                $farParentTable = $relation->getFarParent()->getTable();
+                if (isset($callback[$farParentTable])) {
+                    $fakeJoinCallback = new FakeJoinCallback($relation->getBaseQuery(), 'inner', $farParentTable);
+                    $callback[$farParentTable]($fakeJoinCallback);
 
                     if ($fakeJoinCallback->getAlias()) {
                         $alias[1] = $fakeJoinCallback->getAlias();

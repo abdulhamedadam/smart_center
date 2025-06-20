@@ -66,7 +66,7 @@ class AttachAction extends Action
 
         $this->successNotificationTitle(__('filament-actions::attach.single.notifications.attached.title'));
 
-        $this->defaultColor('gray');
+        $this->color('gray');
 
         $this->form(fn (): array => [$this->getRecordSelect()]);
 

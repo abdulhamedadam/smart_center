@@ -30,7 +30,7 @@ class DetachBulkAction extends BulkAction
 
         $this->successNotificationTitle(__('filament-actions::detach.multiple.notifications.detached.title'));
 
-        $this->defaultColor('danger');
+        $this->color('danger');
 
         $this->icon(FilamentIcon::resolve('actions::detach-action') ?? 'heroicon-m-x-mark');
 

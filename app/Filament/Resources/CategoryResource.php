@@ -46,14 +46,14 @@ class CategoryResource extends Resource
                             ->maxLength(255)
                             ->columnSpan(1),
 
-                        SpatieMediaLibraryFileUpload::make('category')
-                            ->collection('category')
-                            ->label(__('common.Image'))
+                        // SpatieMediaLibraryFileUpload::make('category')
+                        //     ->collection('category')
+                        //     ->label(__('common.Image'))
 
-                            ->image()
-                            ->responsiveImages()
-                            ->disk('public')
-                            ->rules(['image', 'max:2048']),
+                        //     ->image()
+                        //     ->responsiveImages()
+                        //     ->disk('public')
+                        //     ->rules(['image', 'max:2048']),
                     ])
                     ->columns(2),
 
@@ -86,12 +86,12 @@ class CategoryResource extends Resource
                         return $state;
                     })
                     ->searchable(),
-                SpatieMediaLibraryImageColumn::make('image')
-                    ->label(__('common.Image'))
-                    ->collection('category')
-                    ->toggleable(isToggledHiddenByDefault: true)
-                    ->disk('')
-                    ->circular(),
+                // SpatieMediaLibraryImageColumn::make('image')
+                //     ->label(__('common.Image'))
+                //     ->collection('category')
+                //     ->toggleable(isToggledHiddenByDefault: true)
+                //     ->disk('')
+                //     ->circular(),
             ])
             ->filters([
 

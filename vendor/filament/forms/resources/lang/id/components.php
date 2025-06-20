@@ -12,11 +12,11 @@ return [
 
             'add' => [
 
-                'label' => 'Tambahkan ke :label',
+                'label' => 'Tambahkan :label',
 
                 'modal' => [
 
-                    'heading' => 'Tambahkan ke :label',
+                    'heading' => 'Tambah ke :label',
 
                     'actions' => [
 
@@ -32,11 +32,11 @@ return [
 
             'add_between' => [
 
-                'label' => 'Sisipkan di antara blok',
+                'label' => 'Sisipkan',
 
                 'modal' => [
 
-                    'heading' => 'Tambahkan ke :label',
+                    'heading' => 'Tambah ke :label',
 
                     'actions' => [
 
@@ -296,7 +296,7 @@ return [
             'ordered_list' => 'Daftar berurut',
             'redo' => 'Kembalikan',
             'strike' => 'Coret',
-            'table' => 'Tabel',
+            'table' => 'Table',
             'undo' => 'Batalkan',
         ],
 
@@ -316,11 +316,11 @@ return [
         'actions' => [
 
             'add' => [
-                'label' => 'Tambahkan ke :label',
+                'label' => 'Tambahkan :label',
             ],
 
             'add_between' => [
-                'label' => 'Sisipkan di antara',
+                'label' => 'Sisipkan',
             ],
 
             'delete' => [
@@ -408,8 +408,6 @@ return [
 
             'create_option' => [
 
-                'label' => 'Buat',
-
                 'modal' => [
 
                     'heading' => 'Buat',
@@ -431,8 +429,6 @@ return [
             ],
 
             'edit_option' => [
-
-                'label' => 'Ubah',
 
                 'modal' => [
 
