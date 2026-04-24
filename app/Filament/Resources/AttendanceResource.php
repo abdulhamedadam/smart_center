@@ -252,7 +252,7 @@ class AttendanceResource extends Resource
                                     ->with('student')
                                     ->get()
                                     ->map(function ($detail) {
-                                        return $detail->student->full_name;
+                                        return e((string) ($detail->student->full_name ?? ''));
                                     })
                                     ->join('<br>');
                                 
@@ -278,7 +278,7 @@ class AttendanceResource extends Resource
                                     ->with('student')
                                     ->get()
                                     ->map(function ($detail) {
-                                        return $detail->student->full_name;
+                                        return e((string) ($detail->student->full_name ?? ''));
                                     })
                                     ->join('<br>');
                                 

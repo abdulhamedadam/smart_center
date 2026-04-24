@@ -135,12 +135,22 @@ return array(
     'App\\Http\\Controllers\\Admin\\CategoryController' => $baseDir . '/app/Http/Controllers/Admin/CategoryController.php',
     'App\\Http\\Controllers\\ContactMessageController' => $baseDir . '/app/Http/Controllers/ContactMessageController.php',
     'App\\Http\\Controllers\\Controller' => $baseDir . '/app/Http/Controllers/Controller.php',
+<<<<<<< Updated upstream
     'App\\Http\\Controllers\\HomeController' => $baseDir . '/app/Http/Controllers/HomeController.php',
     'App\\Http\\Controllers\\ServiceController' => $baseDir . '/app/Http/Controllers/ServiceController.php',
     'App\\Http\\Controllers\\SliderController' => $baseDir . '/app/Http/Controllers/SliderController.php',
     'App\\Http\\Resources\\ContactMessageResource' => $baseDir . '/app/Http/Resources/ContactMessageResource.php',
     'App\\Http\\Resources\\ServiceResource' => $baseDir . '/app/Http/Resources/ServiceResource.php',
     'App\\Http\\Resources\\SliderResource' => $baseDir . '/app/Http/Resources/SliderResource.php',
+=======
+    'App\\Http\\Controllers\\ProfileController' => $baseDir . '/app/Http/Controllers/ProfileController.php',
+    'App\\Http\\Livewire\\AssignmentResultsTable' => $baseDir . '/app/Http/Livewire/AssignmentResultsTable.php',
+    'App\\Http\\Livewire\\ResultsTable' => $baseDir . '/app/Http/Livewire/ResultsTable.php',
+    'App\\Http\\Middleware\\SecureFileUploads' => $baseDir . '/app/Http/Middleware/SecureFileUploads.php',
+    'App\\Http\\Middleware\\SecurityHeaders' => $baseDir . '/app/Http/Middleware/SecurityHeaders.php',
+    'App\\Http\\Requests\\Auth\\LoginRequest' => $baseDir . '/app/Http/Requests/Auth/LoginRequest.php',
+    'App\\Http\\Requests\\ProfileUpdateRequest' => $baseDir . '/app/Http/Requests/ProfileUpdateRequest.php',
+>>>>>>> Stashed changes
     'App\\Interfaces\\CourseInterface' => $baseDir . '/app/Interfaces/CourseInterface.php',
     'App\\Interfaces\\InstructorInterface' => $baseDir . '/app/Interfaces/InstructorInterface.php',
     'App\\Interfaces\\StudentInterface' => $baseDir . '/app/Interfaces/StudentInterface.php',

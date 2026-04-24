@@ -15,6 +15,8 @@ use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
 use Filament\Widgets;
+use App\Http\Middleware\SecureFileUploads;
+use App\Http\Middleware\SecurityHeaders;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -61,6 +63,8 @@ class AdminPanelProvider extends PanelProvider
                 ShareErrorsFromSession::class,
                 VerifyCsrfToken::class,
                 SubstituteBindings::class,
+                SecurityHeaders::class,
+                SecureFileUploads::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
             ])

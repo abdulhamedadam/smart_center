@@ -2,12 +2,9 @@
 
 namespace App\Http\Livewire;
 
-use App\Filament\Resources\CoursesResource;
-use App\Models\CourseAssignmentsResults;
 use App\Models\CourseTestsResults;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Resources\Pages\Page;
 use Filament\Support\Contracts\TranslatableContentDriver;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Columns\TextColumn;
@@ -15,55 +12,55 @@ use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Livewire\Component;
 
-class AssignmentResultsTable extends Component implements HasTable,HasForms
+class ResultsTable extends Component implements HasTable, HasForms
 {
     use InteractsWithTable;
     use InteractsWithForms;
-    public $assignment;
+
+    public $testId;
+
     protected $listeners = ['refreshResultsTable' => '$refresh'];
 
     protected function getTableQuery()
     {
-       // dd($this->assignment);
-        return CourseAssignmentsResults::where('assignment_id', $this->assignment)
-            ->with('student');
+        return CourseTestsResults::where('test_id', $this->testId)->with('student');
     }
+
     protected function getTableColumns(): array
     {
         return [
             TextColumn::make('student.full_name')
                 ->label('Student'),
-           TextColumn::make('grade')
+            TextColumn::make('grade')
                 ->label('Grade'),
-           TextColumn::make('feedback')
+            TextColumn::make('feedback')
                 ->label('Feedback')
                 ->limit(30),
-
         ];
     }
-    //------------------------------------------------------------------------------------------------------------------
+
     protected function getTableActions(): array
     {
         return [
             DeleteAction::make()
-                ->action(function (CourseAssignmentsResults $record) {
+                ->action(function (CourseTestsResults $record) {
                     $record->delete();
                 })
                 ->requiresConfirmation()
                 ->modalHeading('Delete Result')
                 ->modalSubheading('Are you sure you want to delete this test result? This action cannot be undone.')
-                ->modalButton('Delete')
+                ->modalButton('Delete'),
         ];
     }
-    //------------------------------------------------------------------------------------------------------------------
+
     public function render()
     {
-        return view('livewire.assignment_results_table');
+        return view('livewire.results-table');
     }
-    //------------------------------------------------------------------------------------------------------------------
 
     public function makeFilamentTranslatableContentDriver(): ?TranslatableContentDriver
     {
         return null;
     }
 }
+

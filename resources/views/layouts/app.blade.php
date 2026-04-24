@@ -11,6 +11,7 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
+<<<<<<< Updated upstream
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -19,6 +20,16 @@
         <nav class="bg-white border-b border-gray-100">
             <!-- Navigation content -->
         </nav>
+=======
+        <!-- Scripts -->
+        @if (! app()->environment('testing'))
+            @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @endif
+    </head>
+    <body class="font-sans antialiased">
+        <div class="min-h-screen bg-gray-100">
+            @include('layouts.navigation')
+>>>>>>> Stashed changes
 
         <!-- Page Content -->
         <main>

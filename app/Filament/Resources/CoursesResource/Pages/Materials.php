@@ -108,11 +108,12 @@ class Materials extends Page implements HasForms, HasTable
                         return '';
                     }
 
-                    return new \Illuminate\Support\HtmlString("
-                    <a href='{$media->getUrl()}' target='_blank' style='cursor: pointer' title='".__('Click to open file')."'>
-                        {$media->file_name}
-                    </a>
-                ");
+                    
+                    $url = e($media->getUrl());
+                    $name = e($media->file_name);
+                    $title = e(__('Click to open file'));
+
+                    return new \Illuminate\Support\HtmlString("<a href=\"{$url}\" target=\"_blank\" style=\"cursor: pointer\" title=\"{$title}\">{$name}</a>");
                 })
                 ->html(),
         ];
