@@ -31,7 +31,7 @@ class Authenticate extends Middleware
 
         abort_if(
             $user instanceof FilamentUser ?
-                ( $user->canAccessPanel($panel)) :
+                (! $user->canAccessPanel($panel)) :
                 (config('app.env') !== 'local'),
             403,
         );
